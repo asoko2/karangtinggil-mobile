@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:pelam/shared/shared.dart';
 
 class API {
-  final String _url = 'http://192.168.1.136:3333/';
   var storage = const FlutterSecureStorage();
 
   var token;
@@ -13,7 +13,7 @@ class API {
   }
 
   checkLoggedIn() async {
-    Uri url = Uri.parse('${_url}auth/check');
+    Uri url = Uri.parse('${apiUrl}auth/check');
     await _getToken();
     var res = await http.get(url, headers: _setHeaders());
     var body = jsonDecode(res.body);
@@ -21,7 +21,7 @@ class API {
   }
 
   auth(String username, String password) async {
-    Uri fullUrl = Uri.parse('${_url}auth/login');
+    Uri fullUrl = Uri.parse('${apiUrl}auth/login');
     var res = await http.post(fullUrl,
         body: jsonEncode({
           'username': username,
@@ -36,7 +36,7 @@ class API {
   }
 
   register(data) async {
-    Uri fullUrl = Uri.parse('${_url}auth/register');
+    Uri fullUrl = Uri.parse('${apiUrl}auth/register');
     var res = await http.post(fullUrl,
         body: jsonEncode({
           'username': data['username'],
@@ -52,8 +52,9 @@ class API {
   }
 
   updateUser(data) async {
-    Uri fullUrl = Uri.parse('${_url}pemohon/${data['nik']}');
+    Uri fullUrl = Uri.parse('${apiUrl}pemohon/${data['nik']}');
     await _getToken();
+    print(data);
     var res =
         await http.put(fullUrl, body: jsonEncode(data), headers: _setHeaders());
 
@@ -65,7 +66,7 @@ class API {
   }
 
   getSurat(nik) async {
-    Uri fullUrl = Uri.parse('${_url}pemohon/getSurat/$nik');
+    Uri fullUrl = Uri.parse('${apiUrl}pemohon/getSurat/$nik');
     await _getToken();
     var res = await http.get(fullUrl, headers: _setHeaders());
     var body = jsonDecode(res.body);
@@ -73,7 +74,7 @@ class API {
   }
 
   uploadSurat(data, apiURL) async {
-    Uri fullUrl = Uri.parse(_url + apiURL);
+    Uri fullUrl = Uri.parse(apiUrl + apiURL);
     await _getToken();
     var res = await http.post(fullUrl,
         body: jsonEncode(data), headers: _setHeaders());
@@ -81,7 +82,7 @@ class API {
   }
 
   getData(apiURL) async {
-    Uri fullUrl = Uri.parse(_url + apiURL);
+    Uri fullUrl = Uri.parse(apiUrl + apiURL);
     await _getToken();
     var res = await http.get(
       fullUrl,
@@ -93,7 +94,7 @@ class API {
   }
 
   getPemohonData(id) async {
-    Uri url = Uri.parse('${_url}pemohon/byId/$id');
+    Uri url = Uri.parse('${apiUrl}pemohon/byId/$id');
     await _getToken();
     var res = await http.get(
       url,
@@ -106,16 +107,13 @@ class API {
 
   uploadKK(file, String nik) async {
     await _getToken();
-    print(nik);
     var request =
-        http.MultipartRequest('POST', Uri.parse('${_url}pemohon/upload-kk'));
-    print(request.url);
+        http.MultipartRequest('POST', Uri.parse('${apiUrl}pemohon/upload-kk'));
     request.headers['Content-type'] = 'application/json';
     request.headers['Authorization'] = 'Bearer $token';
     request.fields['nik'] = nik;
     request.files.add(await http.MultipartFile.fromPath('file_kk', file));
     var response = await request.send();
-    print(response.statusCode);
     return response.statusCode;
   }
 

@@ -235,10 +235,12 @@ class _EditPemohonPageState extends State<EditPemohonPage> {
                                               firstDate: DateTime(1970),
                                               lastDate: DateTime.now())
                                           .then((value) {
+                                        var tanggal = DateFormat('yyyy-MM-dd')
+                                            .format(value!);
+                                        print(tanggal);
                                         setState(() {
-                                          _tanggalLahir =
-                                              DateFormat('yyyy-MM-dd')
-                                                  .format(value!);
+                                          _tanggalLahir = tanggal;
+                                          _data['tanggal_lahir'] = tanggal;
                                         });
                                       });
                                     },

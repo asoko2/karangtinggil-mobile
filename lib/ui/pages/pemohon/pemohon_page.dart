@@ -13,6 +13,7 @@ class _PemohonPageState extends State<PemohonPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    print('User = $user');
     return SafeArea(
       child: Scaffold(
         backgroundColor: backgroundColor,

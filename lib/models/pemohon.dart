@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:pelam/shared/shared.dart';
 
 class Pemohon extends Equatable {
   const Pemohon({
@@ -46,7 +47,7 @@ class Pemohon extends Equatable {
       alamat: data['pemohon']['alamat'] ?? '',
       kk: data['pemohon']['kk'] ?? '',
       kkLink: (data['pemohon']['kk'] != '')
-          ? 'http://10.0.2.2:3333/uploads/${data['pemohon']['kk']}'
+          ? '${apiUrl}uploads/${data['pemohon']['kk']}'
           : '',
     );
     return user;
