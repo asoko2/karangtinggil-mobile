@@ -48,6 +48,8 @@ class API {
         headers: _setHeaders());
 
     var body = jsonDecode(res.body);
+    print('register');
+    print(body);
     return body;
   }
 
